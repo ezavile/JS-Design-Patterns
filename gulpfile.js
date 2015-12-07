@@ -15,6 +15,7 @@ var jade = require('gulp-jade');
 
 var browserify = require('browserify');
 var babelify = require('babelify');
+var es2015 = require('babel-preset-es2015')
 
 var clean = require('gulp-rimraf');
 
@@ -33,7 +34,7 @@ var config = {
 	scripts:{
 		main: './src/scripts/index.js',
 		output: './build/js',
-		watch: './src/scripts/**/*.js'
+		watch: './src/scripts/**/**/*.js'
 	}
 };
 
@@ -77,7 +78,14 @@ gulp.task('css', function(){
 gulp.task('js', function() {
 	return browserify({
 		entries: config.scripts.main,
-		transform: babelify
+		"transform": [
+      [
+        "babelify",
+        {
+          "presets": [es2015]
+        }
+      ]
+    ]
 	})
 	.bundle()
 	.pipe(source('app.js'))
